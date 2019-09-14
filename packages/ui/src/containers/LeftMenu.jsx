@@ -17,14 +17,14 @@ type Props = {
 };
 
 const LeftMenu = ({ location, schema }: Props) => {
-  const handleClick = path => e => {
+  const handleClick = (path, id) => e => {
     e.preventDefault();
-    history.push(path);
+    history.push(path.replace(':id', id));
   };
 
-  const isActive = url => location.pathname === url;
+  const isActive = (url, id) => location.pathname === url.replace(':id', id);
 
-  const hiddenLayers = schema.slice(0, -1);
+  const hiddenLayers = schema.slice(1, -1);
 
   return (
     <Menu pointing secondary vertical>
@@ -36,21 +36,26 @@ const LeftMenu = ({ location, schema }: Props) => {
       />
       <Menu.Item
         icon="step-chart"
-        onClick={handleClick(URLS.INPUT_LAYER)}
-        active={isActive(URLS.INPUT_LAYER)}
+        onClick={handleClick(URLS.LAYERS, 0)}
+        active={isActive(URLS.LAYERS, 0)}
         name="Input layout"
       />
-      <Dropdown item text="Hidden layers" disabled={!!hiddenLayers.length}>
+      <Dropdown item text="Hidden layers" disabled={!hiddenLayers.length}>
         <Dropdown.Menu>
           {hiddenLayers.map((_, i) => (
-            <Dropdown.Item>{`Layer ${i + 1}`}</Dropdown.Item>
+            <Dropdown.Item
+              onClick={handleClick(URLS.LAYERS, i + 1)}
+              active={isActive(URLS.LAYERS, i + 1)}
+            >
+              {`Layer ${i + 1}`}
+            </Dropdown.Item>
           ))}
         </Dropdown.Menu>
       </Dropdown>
       <Menu.Item
         icon="step-chart"
-        onClick={handleClick(URLS.OUTPUT_LAYER)}
-        active={isActive(URLS.OUTPUT_LAYER)}
+        onClick={handleClick(URLS.LAYERS, schema.length - 1)}
+        active={isActive(URLS.LAYERS, schema.length - 1)}
         name="Output layout"
       />
       <Menu.Item

@@ -5,7 +5,7 @@ import { Switch, Router as BrowserRouter, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import history from './core/history';
 import { LeftMenu } from './containers';
-import { IndexPage, SettingsPage } from './pages';
+import { IndexPage, SettingsPage, InputLayerPage } from './pages';
 import URLS from './core/urls';
 import store from './core/store';
 import GlobalMessages from './containers/GlobalMessages';
@@ -45,7 +45,7 @@ const App = () => (
           <Switch>
             <Route path={URLS.INDEX} component={IndexPage} exact />
             <Route path={URLS.SETTINGS} component={SettingsPage} exact />
-            {/* <Route path={URLS.INPUT_LAYER} component={InputLayerPage} exact /> */}
+            <Route path={URLS.LAYERS} component={InputLayerPage} exact />
           </Switch>
         </PageContainer>
       </Container>

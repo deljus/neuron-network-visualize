@@ -5,13 +5,25 @@ import {
   UPDATE_SCHEMA,
   UPDATE_ACTIVATION_FN_NAME,
   STOP_LEARNING,
-  START_LEARNING
+  START_LEARNING,
+  UPDATE_SAMPLES,
+  UPDATE_VISUALIZE,
 } from '../constants/learning';
-import type { Schema } from '../../types/data.types';
+import type { Schema, Samples } from '../../types/data.types';
 
 export const updateLearningProgressAction = (progress: boolean) => ({
   type: UPDATE_LEARNING_PROGRESS,
   progress
+});
+
+export const uptateSamplesActions = (samples: Samples) => ({
+  type: UPDATE_SAMPLES,
+  samples
+});
+
+export const updateVisualize = (visualize) => ({
+  type: UPDATE_VISUALIZE,
+  visualize,
 });
 
 export const updateSchemaAction = (schema: Schema) => ({

@@ -5,8 +5,9 @@ import {
   UPDATE_EPOCH,
   UPDATE_SAMPLES,
   UPDATE_SCHEMA,
-  UPDATE_VISUALIZE_WEIGHT_MATRIX,
-  SKIP_TO_DEFAULT_LEARNING
+  UPDATE_VISUALIZE,
+  SKIP_TO_DEFAULT_LEARNING,
+  PART_OF_LEARNING_DATA
 } from '../constants/learning';
 import type { Samples, Schema, Epoch } from '../../types/data.types';
 
@@ -16,9 +17,7 @@ type State = {
   isLearning: boolean,
   epoch: Epoch,
   activationFnName: string,
-  visualize?: {
-    weightMatrix: Array<number>
-  }
+  visualize: Array
 };
 
 const initState = {
@@ -27,9 +26,7 @@ const initState = {
   isLearning: false,
   epoch: 100,
   activationFnName: Object.keys(ACTIVATION)[0],
-  visualize: {
-    weightMatrix: null
-  }
+  visualize: []
 };
 
 const learning = (state: State = initState, action) => {
@@ -38,20 +35,23 @@ const learning = (state: State = initState, action) => {
       return { ...state, schema: action.schema };
     case UPDATE_EPOCH:
       return { ...state, epoch: action.epoch };
+    case UPDATE_VISUALIZE:
+      return { ...state, visualize: action.visualize };
     case UPDATE_SAMPLES:
-      return { ...state, samples: action.samples };
-    case UPDATE_LEARNING_PROGRESS:
-      return { ...state, isLearning: action.progress };
-    case UPDATE_VISUALIZE_WEIGHT_MATRIX:
+      const { samples } = action;
       return {
         ...state,
-        visualize: {
-          ...state.visualize,
-          weightMatrix: action.weightMatrix
-        }
+        samples,
+        schema: [samples.input[0].length, ...state.schema.slice(1, -1), samples.output[0].length]
       };
+    case UPDATE_LEARNING_PROGRESS:
+      return { ...state, isLearning: action.progress };
     case SKIP_TO_DEFAULT_LEARNING:
       return { ...initState };
+
+    case PART_OF_LEARNING_DATA:
+      return { ...state, visualize: [...state.visualize, action.message] };
+
     default:
       return { ...state };
   }

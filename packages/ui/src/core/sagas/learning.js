@@ -1,30 +1,48 @@
-import { takeEvery, put } from 'redux-saga/effects';
+import { takeEvery, put, select } from 'redux-saga/effects';
 import { setNotificationAction } from '../actions/notifications';
-import { VALIDATE_DATA_LEADNING_FILE, START_LEARNING, STOP_LEARNING } from '../constants/learning';
-import { updateLearningProgressAction } from '../actions/learning';
+import {VALIDATE_DATA_LEADNING_FILE, START_LEARNING, STOP_LEARNING } from '../constants/learning';
+import { updateLearningProgressAction, uptateSamplesActions, updateVisualize } from '../actions/learning';
 
-const { ipcRenderer } = window.require('electron');
+export function* validateLearningFile({ data }) {
+  if (!data) {
+    yield put(setNotificationAction('fileParamsMissing', 'empty file'));
+  }
 
-function* validateLearningFile({ data }) {
-  const { samples } = JSON.stringify(data);
+  const { samples } = JSON.parse(data);
 
-  if (!samples || !samples.input || !samples.output) {
-    yield put(setNotificationAction('fileParamsMissing', 'required fields are missing'));
+  switch (true) {
+    case !samples || !samples.input || !samples.output:
+      yield put(setNotificationAction('fileParamsMissing', 'required fields are missing'));
+      break;
+    case !samples.input.length || !samples.output.length:
+      yield put(setNotificationAction('fileParamsMissing', 'field lengths is empty'));
+      break;
+    case samples.input.length !== samples.output.length:
+      yield put(setNotificationAction('fileParamsMissing', 'field lengths do not match'));
+      break;
+    case !samples.input.every(inp => inp.length === samples.input[0].length) ||
+      !samples.output.every(out => out.length === samples.output[0].length):
+      yield put(setNotificationAction('fileParamsMissing', 'different field lengths'));
+      break;
+    default:
+      yield put(uptateSamplesActions(samples));
   }
 }
 
-function* startLearning() {
-  ipcRenderer.send('START_LEARNING_MESSAGE');
+function* startLearning(ipcRenderer) {
+  const data = yield select(state => state.learning);
+  ipcRenderer.send('START_LEARNING_MESSAGE', data);
+  yield put(updateVisualize([]));
   yield put(updateLearningProgressAction(true));
 }
 
-function* stopLearning() {
+function* stopLearning(ipcRenderer) {
   ipcRenderer.send('STOP_LEARNING_MESSAGE');
   yield put(updateLearningProgressAction(false));
 }
 
-export default [
+export default ipcRenderer => [
   takeEvery(VALIDATE_DATA_LEADNING_FILE, validateLearningFile),
-  takeEvery(START_LEARNING, startLearning),
-  takeEvery(STOP_LEARNING, stopLearning)
+  takeEvery(START_LEARNING, startLearning, ipcRenderer),
+  takeEvery(STOP_LEARNING, stopLearning, ipcRenderer),
 ];

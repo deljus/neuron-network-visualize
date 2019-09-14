@@ -1,4 +1,4 @@
-const { Perceptron, Matrix } = require('perceptron');
+const { Perceptron, Matrix } = require('neuron-network');
 
 let neuron = null;
 
@@ -8,8 +8,8 @@ const callBack = data => {
 
 const start = data => {
   neuron = new Perceptron(data);
-  const input = new Matrix(...data.learn.in);
-  const output = new Matrix(...data.learn.out);
+  const input = new Matrix(...data.samples.input);
+  const output = new Matrix(...data.samples.output);
   neuron.learn(input, output, callBack);
 };
 

@@ -37,7 +37,7 @@ const FormContainer = ({
   const changeSchema = (val, i) => {
     const newSchema = [...schema];
     newSchema[i + 1] = val;
-    updateSchema([...schema]);
+    updateSchema([...newSchema]);
   };
 
   const changeEpoch = e => {

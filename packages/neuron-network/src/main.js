@@ -40,14 +40,14 @@ class Perceptron {
     dfn: Function
   };
 
-  constructor({ weightMatrix, schema, activation, epoch, flinders }: PerceptronType) {
+  constructor({ weightMatrix, schema, activation, epoch }: PerceptronType) {
     this.weightMatrix =
       (weightMatrix && createWeightMatrix(weightMatrix)) ||
       (schema && createRandomWeightMatrix(schema)) ||
       createRandomWeightMatrix([3, 1]);
     this.activation = activation || ACTIVATION.SIGMOID;
     this.epoch = epoch || 100000;
-    this.flinders = flinders || 20;
+    this.flinders = Math.floor(epoch / 30);
   }
 
   get weight() {
@@ -76,7 +76,7 @@ class Perceptron {
 
       if (callback && !(i % this.flinders)) {
         callback({
-          epoch: this.epoch - i,
+          epoch: i,
           weightMatrix: this.weightMatrix,
           divergence
         });
