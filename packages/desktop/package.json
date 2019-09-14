@@ -1,0 +1,74 @@
+{
+  "name": "neuron-desktop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "homepage": "./",
+  "scripts": {
+    "test": "../../node_modules/.bin/jest --colors",
+    "electron": "set ELECTRON_START_URL=http://localhost:3000 && electron bootwithbabel.js .",
+    "lint": "eslint ./ --cache --ignore-pattern .gitignore",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "start-dev": "node src/waitReact.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.electron.electron-with",
+    "directories": {
+      "buildResources": "public"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "flowpoints": "^1.0.15",
+    "gpu.js": "^2.0.0-rc.26",
+    "history": "^4.9.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-redux": "^6.0.0",
+    "redux-saga": "^1.0.5",
+    "redux-logger": "^3.0.6",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
+    "recharts": "^1.7.1",
+    "redux": "^4.0.1",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.0",
+    "styled-components": "^4.3.2",
+    "rc-slider": "^8.6.13",
+    "react-json-graph": "^2.0.2",
+    "react-sizeme": "^2.6.7",
+    "neuron-network": "^1.0.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^21.2.0",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/plugin-transform-classes": "^7.5.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-flow": "^7.0.0",
+    "babel-eslint": "10.0.2",
+    "babel-jest": "^24.8.0",
+    "react-scripts": "^3.1.1",
+    "electron": "^6.0.6"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

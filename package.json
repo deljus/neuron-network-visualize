@@ -1,0 +1,33 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^3.16.4",
+    "eslint-config-airbnb": "^18.0.0",
+    "eslint-plugin-flowtype": "^4.2.0",
+    "flow-bin": "^0.105.1",
+    "eslint": "^6.1.0",
+    "jest": "24.8.0",
+    "flow": "^0.2.3",
+    "babel-eslint": "10.0.2",
+    "eslint-plugin-react": "^7.14.3",
+    "prettier": "^1.18.2",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-import": "^2.18.2"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "lerna run test --stream",
+    "flow": "flow",
+    "dev": "lerna run start-dev --stream"
+  },
+  "jest": {
+    "testMatch": [
+      "**/*.test.js"
+    ]
+  }
+}

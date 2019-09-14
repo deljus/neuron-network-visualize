@@ -1,0 +1,37 @@
+{
+  "name": "neuron-network",
+  "version": "1.0.0",
+  "main": "dist/perceptron.cjs.js",
+  "module": "dist/perceptron.esm.js",
+  "browser": "dist/perceptron.umd.js",
+  "dependencies": {
+    "ms": "^2.1.2"
+  },
+  "devDependencies": {
+    "rollup": "^1.20.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-flow": "^1.1.1",
+    "rollup-plugin-cpy": "^2.0.1",
+    "rollup-plugin-terser": "^5.1.1",
+    "@babel/core": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/plugin-transform-classes": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.6.0",
+    "babel-jest": "^24.8.0"
+  },
+  "scripts": {
+    "build": "rollup -c --environment BUILD:production",
+    "dev": "rollup -c -w",
+    "test": "../../node_modules/.bin/jest --colors",
+    "pretest": "npm run build"
+  },
+  "files": [
+    "dist"
+  ]
+}
