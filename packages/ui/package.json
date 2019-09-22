@@ -5,7 +5,7 @@
   "homepage": "./",
   "scripts": {
     "test": "jest",
-    "start-dev": "react-scripts start",
+    "start-dev-ui": "react-scripts start",
     "build-ui": "react-scripts build"
   },
   "keywords": [],

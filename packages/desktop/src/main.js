@@ -1,11 +1,13 @@
 // @flow
 import { app, BrowserWindow, Menu } from 'electron';
-import url from 'url';
 import path from 'path';
+import isDev from 'electron-is-dev';
 import menuTemplate from './app/menuTemplate';
 import Learning from './app/learning';
 
 let mainWindow;
+
+const devServer = 'http://localhost:3000';
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -13,22 +15,17 @@ function createWindow() {
     height: 600,
     minWidth: 850,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: false
     }
   });
 
-  const startUrl =
-    process.env.ELECTRON_START_URL ||
-    url.format({
-      pathname: path.join(__dirname, '/../build/index.html'),
-      protocol: 'file:',
-      slashes: true
-    });
+  const startUrl = isDev ? devServer : `file://${path.join(__dirname, '../build-ui/index.html')}`;
 
   mainWindow.loadURL(startUrl);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // devtools
+  if (isDev) mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;

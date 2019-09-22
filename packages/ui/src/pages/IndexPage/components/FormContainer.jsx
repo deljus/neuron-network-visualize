@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Form, Input, Select } from 'semantic-ui-react';
+import { Form, Input, Select, Checkbox } from 'semantic-ui-react';
 import { ACTIVATION } from 'neuron-network';
 import Slider from 'rc-slider';
 import LayersSlider from './LayersSlider';
@@ -16,7 +16,9 @@ type Props = {
   activationFnName: ActivationFnName,
   updateActivationFnName: ActivationFnName => void,
   maxEpoch: number,
-  minEpoch: number
+  minEpoch: number,
+  bias: boolean,
+  updateBias: (boolean) => void,
 };
 
 const FormContainer = ({
@@ -27,8 +29,12 @@ const FormContainer = ({
   activationFnName,
   updateActivationFnName,
   maxEpoch,
+  bias,
+  updateBias,
   minEpoch
 }: Props) => {
+  const biasDiff = bias ? 1 : 0;
+
   const createSchema = val => {
     const newSchema = [...Array(val)].map(() => 3);
     updateSchema([schema[0], ...newSchema, schema[schema.length - 1]]);
@@ -36,7 +42,7 @@ const FormContainer = ({
 
   const changeSchema = (val, i) => {
     const newSchema = [...schema];
-    newSchema[i + 1] = val;
+    newSchema[i + 1] = val + biasDiff;
     updateSchema([...newSchema]);
   };
 
@@ -52,7 +58,12 @@ const FormContainer = ({
   };
 
   const changeActivationFnName = (_, { value }) => {
+    console.log(value)
     updateActivationFnName(value);
+  };
+
+  const changeBias = (_, { checked }) => {
+    updateBias(checked);
   };
 
   return (
@@ -87,8 +98,15 @@ const FormContainer = ({
           options={createOptions(Object.keys(ACTIVATION))}
         />
       </Form.Group>
-      <Form.Group widths="equal">
-        <Form.Field control={LayersSlider} schema={schema.slice(1, -1)} onChange={changeSchema} />
+      <Form.Group inline>
+        <Form.Field control={LayersSlider} biasDiff={biasDiff} schema={schema.slice(1, -1)} onChange={changeSchema} />
+        <Form.Field
+          control={Checkbox}
+          label="Use bias:"
+          value={bias}
+          slider
+          onChange={changeBias}
+        />
       </Form.Group>
     </Form>
   );

@@ -4,9 +4,7 @@ import logger from 'redux-logger';
 import createSagas from './sagas';
 import reducers from './reducers';
 
-const { ipcRenderer } = window.require('electron') || {
-  ipcRenderer: { send: () => {}, on: () => {} }
-};
+const { ipcRenderer } = window.require('electron');
 
 const sagas = createSagas(ipcRenderer);
 

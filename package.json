@@ -15,7 +15,10 @@
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.18.2",
+    "wait-on": "^3.3.0",
+    "rimraf": "^3.0.0",
+    "concurrently": "^4.1.2"
   },
   "workspaces": [
     "packages/*"
@@ -23,7 +26,10 @@
   "scripts": {
     "test": "lerna run test --stream",
     "flow": "flow",
-    "dev": "lerna run start-dev --stream"
+    "dev": "node consoleImage.js && concurrently \"lerna run start-dev-ui\" \"wait-on http://localhost:3000 && lerna run start-dev-desktop --stream\"",
+    "build": "lerna run pretest && lerna run build-ui && yarn run copy-ui && lerna run pack  --stream && yarn run clear",
+    "copy-ui": "cp -r packages/ui/build packages/desktop/build-ui",
+    "clear": "rimraf packages/ui/build packages/desktop/build-ui"
   },
   "jest": {
     "testMatch": [

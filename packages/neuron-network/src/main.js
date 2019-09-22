@@ -40,14 +40,15 @@ class Perceptron {
     dfn: Function
   };
 
-  constructor({ weightMatrix, schema, activation, epoch }: PerceptronType) {
+  constructor({ weightMatrix, schema, activation, epoch, bias }: PerceptronType) {
     this.weightMatrix =
       (weightMatrix && createWeightMatrix(weightMatrix)) ||
       (schema && createRandomWeightMatrix(schema)) ||
       createRandomWeightMatrix([3, 1]);
     this.activation = activation || ACTIVATION.SIGMOID;
-    this.epoch = epoch || 100000;
+    this.epoch = epoch || 100;
     this.flinders = Math.floor(epoch / 30);
+    this.bias = bias || false;
   }
 
   get weight() {
@@ -58,22 +59,35 @@ class Perceptron {
     this.epoch = epoch;
   }
 
+  pushBias(data) {
+    if (this.bias) {
+      const newData = data.map(dt => [...dt, 1]);
+      return new Matrix(...newData);
+    }
+    return new Matrix(...data);
+  }
+
   result(data: Matrix) {
-    const steps = new Matrix(data);
+    const matrixData = this.pushBias(data);
+    const steps = new Matrix(matrixData);
+
     const result = this.weightMatrix.reduce((acc: Matrix, layer: Matrix) => {
-      const res = acc.dot(layer.T).deepMap(this.activation.fn);
+      const res = acc
+        .mapEnd(num => (this.bias ? 1 : num))
+        .dot(layer.T)
+        .deepMap(this.activation.fn);
       steps.push(res);
       return res;
-    }, data);
+    }, matrixData);
     return { data: result, steps: steps.slice(0, -1) };
   }
 
   learn(input: Matrix, output: Matrix, callback) {
-    // eslint-disable-next-line no-plusplus
+    const outPutMatrix = new Matrix(...this.pushBias(output));
+
     for (let i = 0; i < this.epoch; i++) {
       const { data, steps } = this.result(input);
-      const divergence = output.sub(data);
-
+      const divergence = outPutMatrix.sub(data);
       if (callback && !(i % this.flinders)) {
         callback({
           epoch: i,

@@ -9,7 +9,7 @@ const listenMainProcess = ipcRenderer => emit => {
   const loadSamplesFile = (event, data) => emit({ type: VALIDATE_DATA_LEADNING_FILE, data });
   const errorMainProcess = (event, message) => emit(setNotificationAction('main', message));
   const dataOfLearning = (event, message) => emit({ type: PART_OF_LEARNING_DATA, message });
-  const finishLearning = (event, message) => emit(stopLearningAction());
+  const finishLearning = () => emit(stopLearningAction());
 
   ipcRenderer.on('NEW_LEANING_SAMPLES', loadSamplesFile);
   ipcRenderer.on('ERROR_MAIN_PROCESS', errorMainProcess);
@@ -18,9 +18,9 @@ const listenMainProcess = ipcRenderer => emit => {
 
   return () => {
     ipcRenderer.removeAllListeners('NEW_LEANING_SAMPLES', loadSamplesFile);
-    ipcRenderer.removeAllListeners('PART_OF_LEARNING_DATA_MESSAGE', errorMainProcess);
+    ipcRenderer.removeAllListeners('ERROR_MAIN_PROCESS', errorMainProcess);
     ipcRenderer.removeAllListeners('PART_OF_LEARNING_DATA_MESSAGE', dataOfLearning);
-    ipcRenderer.on('FINISH_LEARNING_MESSAGE', finishLearning);
+    ipcRenderer.removeAllListeners('FINISH_LEARNING_MESSAGE', finishLearning);
   };
 };
 

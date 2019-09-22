@@ -1,7 +1,18 @@
 import { takeEvery, put, select } from 'redux-saga/effects';
 import { setNotificationAction } from '../actions/notifications';
-import {VALIDATE_DATA_LEADNING_FILE, START_LEARNING, STOP_LEARNING } from '../constants/learning';
-import { updateLearningProgressAction, uptateSamplesActions, updateVisualize } from '../actions/learning';
+import {
+  VALIDATE_DATA_LEADNING_FILE,
+  START_LEARNING,
+  STOP_LEARNING,
+  UPDATE_BIAS,
+} from '../constants/learning';
+import {
+  updateLearningProgressAction,
+  uptateSamplesActions,
+  updateVisualize,
+  updateSchemaAction
+} from '../actions/learning';
+import { updateSchema } from '../untils/updateSchema';
 
 export function* validateLearningFile({ data }) {
   if (!data) {
@@ -41,8 +52,14 @@ function* stopLearning(ipcRenderer) {
   yield put(updateLearningProgressAction(false));
 }
 
+function* updateBias() {
+  const { schema, samples, bias } = yield select(state => state.learning);
+  yield put(updateSchemaAction(updateSchema(schema, { bias, samples })));
+}
+
 export default ipcRenderer => [
   takeEvery(VALIDATE_DATA_LEADNING_FILE, validateLearningFile),
   takeEvery(START_LEARNING, startLearning, ipcRenderer),
   takeEvery(STOP_LEARNING, stopLearning, ipcRenderer),
+  takeEvery([UPDATE_BIAS], updateBias)
 ];

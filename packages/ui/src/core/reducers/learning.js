@@ -7,7 +7,9 @@ import {
   UPDATE_SCHEMA,
   UPDATE_VISUALIZE,
   SKIP_TO_DEFAULT_LEARNING,
-  PART_OF_LEARNING_DATA
+  UPDATE_ACTIVATION_FN_NAME,
+  PART_OF_LEARNING_DATA,
+  UPDATE_BIAS
 } from '../constants/learning';
 import type { Samples, Schema, Epoch } from '../../types/data.types';
 
@@ -26,7 +28,8 @@ const initState = {
   isLearning: false,
   epoch: 100,
   activationFnName: Object.keys(ACTIVATION)[0],
-  visualize: []
+  visualize: [],
+  bias: false
 };
 
 const learning = (state: State = initState, action) => {
@@ -37,6 +40,10 @@ const learning = (state: State = initState, action) => {
       return { ...state, epoch: action.epoch };
     case UPDATE_VISUALIZE:
       return { ...state, visualize: action.visualize };
+    case UPDATE_BIAS:
+      return { ...state, bias: action.bias };
+    case UPDATE_ACTIVATION_FN_NAME:
+      return { ...state, activationFnName: action.name };
     case UPDATE_SAMPLES:
       const { samples } = action;
       return {

@@ -8,6 +8,7 @@ import {
   START_LEARNING,
   UPDATE_SAMPLES,
   UPDATE_VISUALIZE,
+  UPDATE_BIAS
 } from '../constants/learning';
 import type { Schema, Samples } from '../../types/data.types';
 
@@ -21,9 +22,9 @@ export const uptateSamplesActions = (samples: Samples) => ({
   samples
 });
 
-export const updateVisualize = (visualize) => ({
+export const updateVisualize = visualize => ({
   type: UPDATE_VISUALIZE,
-  visualize,
+  visualize
 });
 
 export const updateSchemaAction = (schema: Schema) => ({
@@ -47,4 +48,9 @@ export const startLearningAction = () => ({
 
 export const stopLearningAction = () => ({
   type: STOP_LEARNING
+});
+
+export const updateBiasAction = bias => ({
+  type: UPDATE_BIAS,
+  bias
 });

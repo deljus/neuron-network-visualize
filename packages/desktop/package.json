@@ -2,21 +2,31 @@
   "name": "neuron-desktop",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main.js",
-  "homepage": "./",
   "scripts": {
     "test": "../../node_modules/.bin/jest --colors",
-    "electron": "set ELECTRON_START_URL=http://localhost:3000 && electron bootwithbabel.js .",
+    "postinstall": "electron-builder install-app-deps",
     "lint": "eslint ./ --cache --ignore-pattern .gitignore",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "start-dev": "node src/waitReact.js",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "start-dev-desktop": "webpack --development && electron build/electron.js",
+    "pack": "webpack --production && electron-builder --macos --publish never"
   },
   "build": {
-    "appId": "com.electron.electron-with",
+    "appId": "com.yourcompany.yourapp",
+    "productName": "Your App",
     "directories": {
-      "buildResources": "public"
+      "output": "dist"
+    },
+    "files": [
+      "./build-ui/**/*",
+      "./node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.lifestyle"
+    },
+    "dmg": {
+      "icon": false
+    },
+    "linux": {
+      "category": "Office"
     }
   },
   "keywords": [],
@@ -44,31 +54,24 @@
     "neuron-network": "^1.0.0"
   },
   "devDependencies": {
-    "electron-builder": "^21.2.0",
+    "electron-prebuilt": "^1.4.13",
+    "electron-builder": "^20.44.4",
+    "electron-is-dev": "^1.1.0",
+    "electron": "^5.0.10",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/register": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/plugin-transform-classes": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.6.0",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-flow": "^7.0.0",
     "babel-eslint": "10.0.2",
     "babel-jest": "^24.8.0",
     "react-scripts": "^3.1.1",
-    "electron": "^6.0.6"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "electron-webpack": "^2.7.4",
+    "webpack": "^4.40.2"
   }
 }

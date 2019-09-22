@@ -15,26 +15,31 @@ const GraphLayout = styled.div`
 `;
 
 class Node extends BaseNode {
-  renderContainer = ({ content: { color, isInputNeuron, isOutNeuron } }) => {
+  renderContainer = ({ content: { color, isInputNeuron, isOutNeuron, isBias } }) => {
     if (isInputNeuron) {
       return (
         <div>
-          Input
-          <Icon name="circle" size="large" color={color} />
+          <Icon name="circle outline" size="large" color={color} />
         </div>
       );
     }
     if (isOutNeuron) {
       return (
         <div>
-          <Icon name="circle" size="large" color={color} />
-          Output
+          <Icon name="circle outline" size="large" color={color} />
+        </div>
+      );
+    }
+    if (isBias) {
+      return (
+        <div>
+          <Icon name="certificate" size="large" color={color} />
         </div>
       );
     }
     return (
       <div>
-        <Icon name="circle outline" size="large" color={color} />
+        <Icon name="microchip" size="large" color={color} />
       </div>
     );
   };
@@ -55,7 +60,7 @@ type NeuronsVisualizeProps = {
   samples: Samples
 };
 
-const NeuronsVisualize = ({ size: { width, height }, schema, samples }: NeuronsVisualizeProps) => {
+const NeuronsVisualize = ({ size: { width, height }, schema, samples, bias }: NeuronsVisualizeProps) => {
   const prefix = Math.random();
   return (
     <GraphLayout>
@@ -63,8 +68,8 @@ const NeuronsVisualize = ({ size: { width, height }, schema, samples }: NeuronsV
         width={width}
         height={height}
         json={{
-          nodes: generateNodes(schema, { width, height, prefix }),
-          edges: generateEdges(schema, prefix, !!samples),
+          nodes: generateNodes(schema, { width, height, prefix, bias }),
+          edges: generateEdges(schema, prefix, !!samples, bias),
           isStatic: true
         }}
         Node={Node}

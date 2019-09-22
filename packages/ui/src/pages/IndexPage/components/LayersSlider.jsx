@@ -26,7 +26,7 @@ type Props = {
   onChange: (string, number) => void
 };
 
-const LayersSlider = ({ schema, onChange }: Props) => (
+const LayersSlider = ({ schema, onChange, biasDiff }: Props) => (
   <SliderContainer>
     {schema.map((value, i) => (
       <SliderWrapper>
@@ -34,7 +34,7 @@ const LayersSlider = ({ schema, onChange }: Props) => (
         <Slider
           min={1}
           max={10}
-          value={value}
+          value={value - biasDiff}
           onChange={v => onChange(v, i)}
           dots
           vertical
@@ -49,13 +49,15 @@ const LayersSlider = ({ schema, onChange }: Props) => (
   </SliderContainer>
 );
 
-const PopupBtn = ({ schema, onChange }: Props) => (
+const PopupBtn = ({ schema, onChange, biasDiff }: Props) => (
   <Popup
-    content={<LayersSlider schema={schema} onChange={onChange} />}
+    content={<LayersSlider schema={schema} onChange={onChange} biasDiff={biasDiff} />}
     on="click"
     position="bottom left"
     pinned
-    trigger={<Button content="Count of neurons" />}
+    trigger={
+      <Button disabled={!schema.length} circular icon="settings" content="Count of neurons" />
+    }
   />
 );
 

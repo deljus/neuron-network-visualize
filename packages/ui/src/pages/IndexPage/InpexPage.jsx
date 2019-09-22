@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import styled from 'styled-components';
+import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import HeaderButtons from './components/HeaderButtons';
 import NeuronsVisualize from './components/NeuronsVisualize';
@@ -10,7 +11,8 @@ import {
   stopLearningAction,
   updateEpochAction,
   updateSchemaAction,
-  updateActivationFnNameAction
+  updateActivationFnNameAction,
+  updateBiasAction
 } from '../../core/actions/learning';
 
 const Layout = styled.div`
@@ -29,7 +31,9 @@ type Props = {
   schema: Array<number>,
   epoch: number,
   activationFnName: string,
-  updateActivationFnName: string => void
+  updateActivationFnName: string => void,
+  bias: boolean,
+  updateBias: boolean => void
 };
 
 const IndexPage = ({
@@ -42,6 +46,8 @@ const IndexPage = ({
   updateEpoch,
   epoch,
   activationFnName,
+  bias,
+  updateBias,
   updateActivationFnName
 }: Props) => {
   return (
@@ -57,10 +63,20 @@ const IndexPage = ({
         updateSchema={updateSchema}
         updateEpoch={updateEpoch}
         epoch={epoch}
+        bias={bias}
+        updateBias={updateBias}
         activationFnName={activationFnName}
         updateActivationFnName={updateActivationFnName}
       />
-      <NeuronsVisualize schema={schema} samples={samples} prefix={Math.random()} />
+      <NeuronsVisualize schema={schema} bias={bias} samples={samples} prefix={Math.random()} />
+      <div>
+        <Icon name="circle outline" />
+        <span>- Input or output neuron &nbsp;</span>
+        <Icon name="microchip" />
+        <span>- Hidden neurons &nbsp;</span>
+        <Icon name="certificate" />
+        <span>- Bias</span>
+      </div>
     </Layout>
   );
 };
@@ -74,7 +90,8 @@ const mapDispatchToProps = {
   stopLearning: stopLearningAction,
   updateSchema: updateSchemaAction,
   updateEpoch: updateEpochAction,
-  updateActivationFnName: updateActivationFnNameAction
+  updateActivationFnName: updateActivationFnNameAction,
+  updateBias: updateBiasAction
 };
 
 export default connect(
