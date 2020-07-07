@@ -57,7 +57,7 @@
     "electron-prebuilt": "^1.4.13",
     "electron-builder": "^20.44.4",
     "electron-is-dev": "^1.1.0",
-    "electron": "^5.0.10",
+    "electron": "^9.1.0",
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/register": "^7.5.5",
